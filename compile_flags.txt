@@ -1,0 +1,10 @@
+-std=c++20
+-I
+.
+-I
+../cpp_orderbook
+-I
+../cpp_fix_codec
+-I
+../cpp_fix_engine
+--language=c++
