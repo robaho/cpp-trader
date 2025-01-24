@@ -22,7 +22,7 @@ use `./makeall.sh` to build `cpp-trader` and all dependent projects.
 
 use `bin/cpp-trader` to start the exchange.
 
-use `cpp_fix_engine/bin/sample_client` to start quoting against the exchange.
+use `cpp_fix_engine/bin/sample_client` or `cpp_fix_engine/massquote.sh` to start quoting against the exchange.
 
 use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the books.
 
