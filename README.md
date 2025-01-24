@@ -6,7 +6,7 @@ __It is a work in progress. It only supports quoting at the moment, but it does 
 
 ## Building
 
-The project depends on
+The project depends on these other [robaho](https://github.com/robaho) projects.
 - [cpp_fixed](https://github.com/robaho/cpp_fixed)
 - [cpp_orderbook](https://github.com/robaho/cpp_orderbook)
 - [cpp_fix_codec](https://github.com/robaho/cpp_fix_codec)
