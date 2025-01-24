@@ -7,4 +7,6 @@
 ../cpp_fix_codec
 -I
 ../cpp_fix_engine
+-I
+../cpp_fixed
 --language=c++
