@@ -36,6 +36,8 @@ use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the bo
 
 using `massquote.sh` and 7 concurrent **FIX** connections on localhost, more than **130k quotes per second**.<sup>1</sup>
 
+as a comparison, using [go-trader](https://github.com/robaho/go-trader) as the exchange, `massquote.sh` on localhost is approximately 35k quotes a second.
+
 <sup>1</sup>These are ping-pong quotes, i.e. send quote, wait for quote ack, send next quote. Streaming quotes are considerably faster.
 
 ```
