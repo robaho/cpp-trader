@@ -8,7 +8,7 @@ ToDo:
 - add market/limit order support including execution reports
 - add multicast market data support for books and trades
 - cancel all orders and quotes when session disconnects
-- possibly add [Nats](https://github.com/nats-io) messaging integration as a trade distribution
+- possibly add [Nats](https://github.com/nats-io) messaging integration for trade distribution
 
 ## Building
 
