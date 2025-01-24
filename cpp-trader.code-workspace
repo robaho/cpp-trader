@@ -1,0 +1,45 @@
+{
+	"folders": [
+        {
+            "path": "../cpp-trader"
+        },
+        {
+            "path": "../cpp_fixed"
+        },
+        {
+            "path": "../cpp_fix_codec"
+        },
+        {
+            "path": "../cpp_orderbook"
+        },
+        {
+            "path": "../cpp_fix_engine"
+        }
+    ],
+    "settings": {
+        "boost-test-adapter-robaho.tests": [
+            {
+                "testExecutables": [
+                    {
+                        "glob": "**/*{_test,_test.exe}"
+                    }
+                ],
+                "debugConfig": "Test Config"
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "lldb",
+                "request": "launch",
+                "name": "launch cpp-trader",
+                "program": "${workspaceFolder:cpp-trader}/bin/cpp-trader",
+                "args": [],
+                "cwd": "${workspaceFolder:cpp-trader}",
+            }
+
+        ]
+    }
+}

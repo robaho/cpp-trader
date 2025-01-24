@@ -15,3 +15,13 @@ The project depends on
 All should be cloned and built at the same directory level. The `Makefile` includes and library locations can be changed if they are available in a different location.
 
 The project builds by default using `make` and CLang. There is a `Makefile.gcc` for building using GCC.
+
+use `./makeall.sh` to build `cpp-trader` and all dependent projects.
+
+## Testing
+
+use `bin/cpp-trader` to start the exchange.
+
+use `cpp_fix_engine/bin/sample_client` to start quoting against the exchange.
+
+use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the books.
