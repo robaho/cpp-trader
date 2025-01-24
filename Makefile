@@ -1,9 +1,9 @@
 CXX = clang++
 INCLUDES = -I ../cpp_orderbook -I ../cpp_fix_codec -I ../cpp_fix_engine -I ../cpp_fixed
-CXXFLAGS = -std=c++20 -O0 -Wall -fsanitize=address -fno-omit-frame-pointer -pedantic-errors -g ${INCLUDES}
 
+# CXXFLAGS = -std=c++20 -O0 -Wall -fsanitize=address -fno-omit-frame-pointer -pedantic-errors -g ${INCLUDES}
 # CXXFLAGS = -std=c++20 -Wall -pedantic-errors -g ${INCLUDES}
-# CXXFLAGS = -std=c++20 -O3 -Wall -pedantic-errors -g ${INCLUDES}
+CXXFLAGS = -std=c++20 -O3 -Wall -pedantic-errors -g ${INCLUDES}
 # CXXFLAGS = -std=c++20 -O3 -fprofile-generate -Wall -pedantic-errors -g ${INCLUDES}
 # CXXFLAGS = -std=c++20 -O3 -fprofile-use=default.profdata -Wall -pedantic-errors -g ${INCLUDES}
 

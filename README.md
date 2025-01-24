@@ -25,3 +25,19 @@ use `bin/cpp-trader` to start the exchange.
 use `cpp_fix_engine/bin/sample_client` to start quoting against the exchange.
 
 use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the books.
+
+## Performance
+
+using `massquote.sh` and 7 concurrent **FIX** connections on localhost, more than **130k quotes per second**.<sup>1</sup>
+
+<sup>1</sup>These are ping-pong quotes, i.e. send quote, wait for quote ack, send next quote. Streaming quotes are considerably faster.
+
+```
+round-trip 100000 MSFT quotes, usec per quote 51.7495, quotes per sec 19323
+round-trip 100000 GOOG quotes, usec per quote 51.9119, quotes per sec 19263
+round-trip 100000 AAPL quotes, usec per quote 51.8749, quotes per sec 19277
+round-trip 100000 ORCL quotes, usec per quote 51.9597, quotes per sec 19245
+round-trip 100000 NFLX quotes, usec per quote 52.2649, quotes per sec 19133
+round-trip 100000 IBM quotes, usec per quote 52.6779, quotes per sec 18983
+round-trip 100000 AMZN quotes, usec per quote 52.7572, quotes per sec 18954
+```
