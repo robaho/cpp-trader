@@ -1,8 +1,13 @@
 ## Summary
 
-This is a C++ implementation FIX based financial exchange, designed for algorithmic testing.
+This is a C++ FIX based financial exchange designed for algorithmic testing.
 
-__It is a work in progress. It only supports quoting at the moment, but it does handle connections from `sample_client` in the `cpp_fix_engine` project.__
+__It is a work in progress. It only supports mass quoting at the moment, via `sample_client` in the `cpp_fix_engine` project.__
+
+ToDo:
+- add market/limit order support including execution reports
+- add multicast market data support for books and trades
+- possibly add [Nats](https://github.com/nats-io) messaging integration as a trade distribution
 
 ## Building
 
