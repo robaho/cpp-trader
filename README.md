@@ -7,6 +7,7 @@ __It is a work in progress. It only supports mass quoting at the moment, via `sa
 ToDo:
 - add market/limit order support including execution reports
 - add multicast market data support for books and trades
+- cancel all orders and quotes when session disconnects
 - possibly add [Nats](https://github.com/nats-io) messaging integration as a trade distribution
 
 ## Building
