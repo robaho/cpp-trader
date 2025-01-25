@@ -6,10 +6,10 @@
 #include "msg_massquote.h"
 #include "msg_orders.h"
 
-class MyServer : public Acceptor {
+class MyServer : public Acceptor , public ExchangeListener {
     Exchange exchange;
 public:
-    MyServer() : Acceptor(9000,SessionConfig("SERVER","*")){};
+    MyServer() : Acceptor(9000,SessionConfig("SERVER","*")), exchange(*this){};
     void onMessage(Session& session,const FixMessage& msg) override {
         auto msgType = msg.msgType();
         if(msgType==MassQuote::msgType) {
@@ -21,6 +21,7 @@ public:
             auto side = msg.getInt(Tag::SIDE)==1 ? Order::BUY : Order::SELL;
             auto orderType = msg.getInt(Tag::ORD_TYPE)==1 ? OrderType::Market : OrderType::Limit;
             auto price = orderType==OrderType::Market ? side == Order::BUY ? DBL_MAX : -DBL_MAX : msg.getFixed(Tag::PRICE);
+            std::cout << "new order " << msg.getString(Tag::CLORDID) << " " << side << " " << orderType << " "<< msg.getString(Tag::SYMBOL) << " " << price << " " << msg.getInt(Tag::ORDER_QTY) << "\n";
             if (side == Order::BUY) {
                 exchange.buy(session.id(),msg.getString(Tag::SYMBOL),price,msg.getInt(Tag::ORDER_QTY),msg.getString(Tag::CLORDID));
             } else {
@@ -35,6 +36,42 @@ public:
             session.sendMessage(OrderCancelReject::msgType,fix);
         }
     }
+    
+    /** callback when order status changes */
+    virtual void onOrder(const Order& order) override {
+        if(order.isQuote()) {
+            return;
+        }
+        FixBuilder fix(256);
+        auto execType = ExecType::Status;
+        auto orderStatus = order.isCancelled() ? OrderStatus::Canceled : order.isFilled() ? OrderStatus::Filled : order.cumulativeQuantity()==0 ? OrderStatus::New : OrderStatus::PartiallyFilled;
+        auto orderSide = order.side==Order::BUY ? OrderSide::Buy : OrderSide::Sell;
+        ExecutionReport::build<7>(fix,order.orderId(), order.instrument, orderSide, 0, 0, order.cumulativeQuantity(), order.averagePrice(), order.remainingQuantity(),order.exchangeId,execType,0,orderStatus);
+        try {
+            // session may be disconnected
+            sendMessage(order.sessionId(),ExecutionReport::msgType,fix);
+        } catch (std::exception& e) {
+            std::cerr << "error sending message " << e.what() << "\n";
+        }
+    };
+
+    /** callback when trade occurs */
+    virtual void onTrade(const Trade& trade) override {
+        FixBuilder fix(256);
+        for (auto order : {trade.aggressor,trade.opposite}) {
+            auto execType = order.remainingQuantity()==0 ? ExecType::Filled : ExecType::PartiallyFilled;
+            auto orderStatus = order.remainingQuantity()==0 ? OrderStatus::Filled : OrderStatus::PartiallyFilled;
+            auto orderSide = order.side==Order::BUY ? OrderSide::Buy : OrderSide::Sell;
+            ExecutionReport::build<7>(fix,order.orderId(), order.instrument, orderSide, trade.price, trade.quantity, order.cumulativeQuantity(), order.averagePrice(), order.remainingQuantity(),order.exchangeId,execType,trade.execId,orderStatus);
+            try {
+                // session may be disconnected
+                sendMessage(order.sessionId(),ExecutionReport::msgType,fix);
+            } catch (std::exception& e) {
+                std::cerr << "error sending message " << e.what() << "\n";
+            }
+        }
+    };
+
     bool validateLogon(const FixMessage& msg) override {
         return true;
     }

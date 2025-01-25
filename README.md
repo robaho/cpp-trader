@@ -5,7 +5,7 @@ This is a C++ FIX based financial exchange designed for algorithmic testing.
 __It is a work in progress. It only supports mass quoting at the moment, via `sample_client` in the `cpp_fix_engine` project.__
 
 ToDo:
-- add market/limit order support including execution reports
+- ~~add market/limit order support including execution reports~~
 - add multicast market data support for books and trades
 - ~~cancel all orders and quotes when session disconnects~~
 - possibly add [Nats](https://github.com/nats-io) messaging integration for trade distribution
@@ -29,6 +29,8 @@ use `./makeall.sh` to build `cpp-trader` and all dependent projects.
 use `bin/cpp-trader` to start the exchange.
 
 use `cpp_fix_engine/bin/sample_client` or `cpp_fix_engine/massquote.sh` to start quoting against the exchange.
+
+use `cpp_fix_engine/bin/sample_sendorder` to send a new order and wait for fill or timeout.
 
 use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the books.
 
