@@ -32,6 +32,17 @@ public:
             std::cout << book;
         }
     }
+    void onDisconnected(const Session& session) override {
+        std::cout << "disconnected " << session.id() << "\n";
+        for(auto order : exchange.orders()) {
+            if(order->sessionId()==session.id()) {
+                if(order->isActive()) {
+                    exchange.cancel(order->exchangeId);
+                }
+            }
+        }
+        Acceptor::onDisconnected(session);
+    }
 };
 
 static volatile bool displayBooks = false;
