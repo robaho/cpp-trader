@@ -1,19 +1,38 @@
 #include <unistd.h>
+#include <cfloat>
 #include <csignal>
 #include "fix_engine.h"
 #include "exchange.h"
 #include "msg_massquote.h"
+#include "msg_orders.h"
 
 class MyServer : public Acceptor {
     Exchange exchange;
 public:
     MyServer() : Acceptor(9000,SessionConfig("SERVER","*")){};
     void onMessage(Session& session,const FixMessage& msg) override {
-        if(msg.msgType()==MassQuote::msgType) {
-            exchange.quote(session.id(),msg.getString(55),msg.getFixed(132),msg.getInt(134),msg.getFixed(133),msg.getInt(135),msg.getString(302));
+        auto msgType = msg.msgType();
+        if(msgType==MassQuote::msgType) {
+            exchange.quote(session.id(),msg.getString(Tag::SYMBOL),msg.getFixed(132),msg.getInt(134),msg.getFixed(133),msg.getInt(135),msg.getString(302));
             FixBuilder fix(256);
             MassQuoteAck::build(fix,msg.getString(117),0);
             session.sendMessage(MassQuoteAck::msgType,fix);
+        } else if(msgType==NewOrderSingle::msgType) {
+            auto side = msg.getInt(Tag::SIDE)==1 ? Order::BUY : Order::SELL;
+            auto orderType = msg.getInt(Tag::ORD_TYPE)==1 ? OrderType::Market : OrderType::Limit;
+            auto price = orderType==OrderType::Market ? side == Order::BUY ? DBL_MAX : -DBL_MAX : msg.getFixed(Tag::PRICE);
+            if (side == Order::BUY) {
+                exchange.buy(session.id(),msg.getString(Tag::SYMBOL),price,msg.getInt(Tag::ORDER_QTY),msg.getString(Tag::CLORDID));
+            } else {
+                exchange.sell(session.id(),msg.getString(Tag::SYMBOL),price,msg.getInt(Tag::ORDER_QTY),msg.getString(Tag::CLORDID));
+            }
+        } else if(msgType==OrderCancelRequest::msgType) {
+            auto exchangeId = msg.getLong(37);
+            auto status = exchange.cancel(exchangeId);
+            FixBuilder fix(256);
+            auto orderStatus = status==0 ? OrderStatus::Canceled : OrderStatus::Rejected;
+            OrderCancelReject::build(fix,exchangeId,msg.getString(Tag::CLORDID), orderStatus);
+            session.sendMessage(OrderCancelReject::msgType,fix);
         }
     }
     bool validateLogon(const FixMessage& msg) override {
