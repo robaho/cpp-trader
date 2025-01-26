@@ -101,7 +101,7 @@ public:
     }
 };
 
-static volatile bool displayBooks = false;
+static std::atomic<bool> displayBooks = false;
 
 int main(int argc, char* argv[]) {
     MyServer server;
