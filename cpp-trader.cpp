@@ -29,11 +29,20 @@ public:
             }
         } else if(msgType==OrderCancelRequest::msgType) {
             auto exchangeId = msg.getLong(37);
-            auto status = exchange.cancel(exchangeId);
+            std::cout << "request to cancel order, exchange id "<< exchangeId <<"\n";
+            int status = 0;
+            try {
+                status = exchange.cancel(exchangeId,session.id());
+            } catch (std::exception& e) {
+                std::cerr << "error cancelling order " << e.what() << "\n";
+                status = -1;
+            }
             FixBuilder fix(256);
-            auto orderStatus = status==0 ? OrderStatus::Canceled : OrderStatus::Rejected;
-            OrderCancelReject::build(fix,exchangeId,msg.getString(Tag::CLORDID), orderStatus);
-            session.sendMessage(OrderCancelReject::msgType,fix);
+            if(status!=0) {
+                std::cout << "order " << exchangeId << " not found\n";
+                OrderCancelReject::build(fix,exchangeId,msg.getString(Tag::CLORDID), OrderStatus::Rejected);
+                session.sendMessage(OrderCancelReject::msgType,fix);
+            }
         }
     }
     
@@ -93,7 +102,7 @@ public:
         for(auto order : exchange.orders()) {
             if(order->sessionId()==session.id()) {
                 if(order->isActive()) {
-                    exchange.cancel(order->exchangeId);
+                    exchange.cancel(order->exchangeId,session.id());
                 }
             }
         }

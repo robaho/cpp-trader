@@ -34,6 +34,8 @@ use `cpp_fix_engine/bin/sample_sendorder` to send a new order and wait for fill 
 
 use `kill -USR1 <pid>` where `pid` is the exchange process to dump all of the books.
 
+use `make run_tests` to run all of the test cases.
+
 ## Performance
 
 using `massquote.sh` and 7 concurrent **FIX** connections on localhost, more than **130k quotes per second**.<sup>1</sup>

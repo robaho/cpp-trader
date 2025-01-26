@@ -1,18 +1,23 @@
 {
 	"folders": [
         {
-            "path": "../cpp-trader"
-        },
-        {
-            "path": "../cpp_fixed"
-        },
-        {
+            "name": "cpp_fix_codec",
             "path": "../cpp_fix_codec"
         },
         {
+            "name": "cpp-trader",
+            "path": "."
+        },
+        {
+            "name": "cpp_fixed",
+            "path": "../cpp_fixed"
+        },
+        {
+            "name": "cpp_orderbook",
             "path": "../cpp_orderbook"
         },
         {
+            "name": "cpp_fix_engine",
             "path": "../cpp_fix_engine"
         }
     ],
