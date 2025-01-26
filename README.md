@@ -2,7 +2,7 @@
 
 This is a C++ FIX based financial exchange designed for algorithmic testing.
 
-__It is a work in progress. It only supports mass quoting at the moment, via `sample_client` in the `cpp_fix_engine` project.__
+__It is a work in progress and under active development.__
 
 ToDo:
 - ~~add market/limit order support including execution reports~~
