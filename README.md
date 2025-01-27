@@ -53,3 +53,14 @@ round-trip 100000 NFLX quotes, usec per quote 52.2649, quotes per sec 19133
 round-trip 100000 IBM quotes, usec per quote 52.6779, quotes per sec 18983
 round-trip 100000 AMZN quotes, usec per quote 52.7572, quotes per sec 18954
 ```
+
+Testing over the network (20 Gb/sec lightening), using 75 client processes on the Mac Mini, it achieves just over 85k quotes per sec, which is slightly better than [go-trader](https://github.com/robaho/go-trader) using FIX.
+
+[cpp_fix_engine](https://github.com/robaho/cpp_fix_engine) uses a thread per client model. With many clients, the system CPU usage is very high due to context switching overhead.
+![cpu_usage](images/cpu_usage.png)
+
+## ToDo
+
+Rework [cpp_fix_engine](https://github.com/robaho/cpp_fix_engine) to use "fibers" (aka green threads) to support hundreds of clients with far less cpu overhead while avoiding the complexities of async IO.
+
+Rework `sample_client` to use multiple connections per process with "fibers".
