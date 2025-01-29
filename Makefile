@@ -1,5 +1,5 @@
 CXX = clang++
-INCLUDES = -I ../cpp_orderbook -I ../cpp_fix_codec -I ../cpp_fix_engine -I ../cpp_fixed
+INCLUDES = -I ../cpp_orderbook -I ../cpp_fix_codec -I ../cpp_fix_engine -I ../cpp_fixed -lboost_fiber -lboost_context
 
 # CXXFLAGS = -std=c++20 -O0 -Wall -fsanitize=address -fno-omit-frame-pointer -pedantic-errors -g ${INCLUDES}
 # CXXFLAGS = -std=c++20 -Wall -pedantic-errors -g ${INCLUDES}
