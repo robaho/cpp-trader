@@ -38,29 +38,16 @@ use `make run_tests` to run all of the test cases.
 
 ## Performance
 
-using `massquote.sh` and 7 concurrent **FIX** connections on localhost, more than **130k quotes per second**.<sup>1</sup>
+using the `cpp_fix_engine` boost fibers branch and
 
-as a comparison, using [go-trader](https://github.com/robaho/go-trader) as the exchange, `massquote.sh` on localhost is approximately 35k quotes a second.
+using `sample_client localhost -bench 75`, more than **1650k quotes per second**.<sup>1</sup>
+
+```
+round-trip 834721 quotes, usec per quote 5.99514, quotes per sec 166801
+```
+
+as a comparison, using [go-trader](https://github.com/robaho/go-trader) and the Go fix client, it does about 45k quotes per second.
 
 <sup>1</sup>These are ping-pong quotes, i.e. send quote, wait for quote ack, send next quote. Streaming quotes are considerably faster.
 
-```
-round-trip 100000 MSFT quotes, usec per quote 51.7495, quotes per sec 19323
-round-trip 100000 GOOG quotes, usec per quote 51.9119, quotes per sec 19263
-round-trip 100000 AAPL quotes, usec per quote 51.8749, quotes per sec 19277
-round-trip 100000 ORCL quotes, usec per quote 51.9597, quotes per sec 19245
-round-trip 100000 NFLX quotes, usec per quote 52.2649, quotes per sec 19133
-round-trip 100000 IBM quotes, usec per quote 52.6779, quotes per sec 18983
-round-trip 100000 AMZN quotes, usec per quote 52.7572, quotes per sec 18954
-```
-
-Testing over the network (20 Gb/sec lightening), using 75 client processes on the Mac Mini, it achieves just over 85k quotes per sec, which is slightly better than [go-trader](https://github.com/robaho/go-trader) using FIX.
-
-[cpp_fix_engine](https://github.com/robaho/cpp_fix_engine) uses a thread per client model. With many clients, the system CPU usage is very high due to context switching overhead.
-![cpu_usage](images/cpu_usage.png)
-
-## ToDo
-
-Rework [cpp_fix_engine](https://github.com/robaho/cpp_fix_engine) to use "fibers" (aka green threads) to support hundreds of clients with far less cpu overhead while avoiding the complexities of async IO.
-
-Rework `sample_client` to use multiple connections per process with "fibers".
+_Updated network timings coming soon._

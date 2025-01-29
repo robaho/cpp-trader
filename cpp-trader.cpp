@@ -9,7 +9,7 @@
 class MyServer : public Acceptor , public ExchangeListener {
     Exchange exchange;
 public:
-    MyServer() : Acceptor(9000,SessionConfig("SERVER","*")), exchange(*this){};
+    MyServer() : Acceptor(9000,SessionConfig("SERVER","*"),std::max(int(std::thread::hardware_concurrency()/2),1)), exchange(*this){};
     void onMessage(Session& session,const FixMessage& msg) override {
         auto msgType = msg.msgType();
         if(msgType==MassQuote::msgType) {
