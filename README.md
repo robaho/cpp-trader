@@ -40,7 +40,7 @@ use `make run_tests` to run all of the test cases.
 
 using the `cpp_fix_engine` boost fibers branch and
 
-using `sample_client localhost -bench 75`, more than **1650k quotes per second**.<sup>1</sup>
+using `sample_client localhost -bench 75`, more than **165k quotes per second**.<sup>1</sup>
 
 ```
 round-trip 834721 quotes, usec per quote 5.99514, quotes per sec 166801
