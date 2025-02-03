@@ -6,11 +6,11 @@
 #include "msg_massquote.h"
 #include "msg_orders.h"
 
-class MyServer : public Acceptor , public ExchangeListener {
+class MyServer : public Acceptor<> , public ExchangeListener {
     Exchange exchange;
 public:
-    MyServer() : Acceptor(9000,SessionConfig("SERVER","*"),std::max(int(std::thread::hardware_concurrency()/2),1)), exchange(*this){};
-    void onMessage(Session& session,const FixMessage& msg) override {
+    MyServer() : Acceptor(9000,DefaultSessionConfig("SERVER","*"),std::max(int(std::thread::hardware_concurrency()/2),1)), exchange(*this){};
+    void onMessage(Session<>& session,const FixMessage& msg) override {
         auto msgType = msg.msgType();
         if(msgType==MassQuote::msgType) {
             exchange.quote(session.id(),msg.getString(Tag::SYMBOL),msg.getFixed(132),msg.getInt(134),msg.getFixed(133),msg.getInt(135),msg.getString(302));
@@ -84,7 +84,7 @@ public:
     bool validateLogon(const FixMessage& msg) override {
         return true;
     }
-    void onLoggedOn(const Session& session) override {
+    void onLoggedOn(const Session<>& session) override {
         std::cout << "logon " << session.id() << "\n";
         Acceptor::onLoggedOn(session);
     }
@@ -97,7 +97,7 @@ public:
             std::cout << book;
         }
     }
-    void onDisconnected(const Session& session) override {
+    void onDisconnected(const Session<>& session) override {
         std::cout << "disconnected " << session.id() << "\n";
         for(auto order : exchange.orders()) {
             if(order->sessionId()==session.id()) {
